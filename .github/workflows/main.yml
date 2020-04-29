@@ -57,7 +57,7 @@ jobs:
         git config --global user.email "tomas@hubelbauer.net"
         git config --global user.name "Tomas Hubelbauer"
         # Check out the `master` branch because by default GitHub Actions checks out detached HEAD
-        git checkout master
+        #git checkout master
         $LastExitCode
         # Run the command
         npm install

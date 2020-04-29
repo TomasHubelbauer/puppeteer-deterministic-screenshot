@@ -12,6 +12,12 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v1
+    - name: Install Puppeteer dependencies
+      if: ${{matrix.os == 'ubuntu-latest'}}
+      run: |
+        set -x
+        # Install Chromium dependencies needed for PDF printing
+        sudo apt install libgbm1 -y
     - name: Run the workflow
       run: |
         set -x

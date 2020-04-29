@@ -77,7 +77,7 @@ jobs:
         # Add the command output to the commit
         git add screenshot-*.png
         $LastExitCode
-        git add screenshot-*.jpg
+        git add screenshot-*.jpeg
         $LastExitCode
         git status
         $LastExitCode

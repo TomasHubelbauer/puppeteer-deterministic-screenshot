@@ -52,9 +52,9 @@ jobs:
       if: ${{matrix.os == 'windows-latest'}}
       run: |
         # Run after macOS and Ubuntu because Git doesn't handle the concurrency
-        Sleep -Seconds 20
+        Sleep -Seconds 10
         # Do not use `Error`, because it crashes GitHub Actions - am using `$LastExitCode` instead, possibly due to the above
-        #$ErrorActionPreference = "SilentlyContinue"
+        $ErrorActionPreference = "SilentlyContinue"
         Set-PSDebug -Trace 1
         # Configure Git for the push from the workflow to the repository
         git config --global user.email "tomas@hubelbauer.net"
@@ -64,6 +64,8 @@ jobs:
         # Check out the `master` branch because by default GitHub Actions checks out detached HEAD
         git checkout master
         $LastExitCode
+        # Rebase if the branch has meanwhile changed (fail if there are automatically irresolvable merge conflicts)
+        git pull --rebase
         # Run the command
         npm install
         $LastExitCode

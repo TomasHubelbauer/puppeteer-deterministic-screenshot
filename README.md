@@ -26,6 +26,11 @@ Is this true for all OSs?
 | Linux   | ?                                    |
 | macOS   | ?                                    |
 
+## Bonus: Git Changes
+
+Git won't track the screenshot as changed if it changes only in metadata, but
+not the binary data.
+
 ## To-Do
 
 ### Consider looking into the software rendering angle described above

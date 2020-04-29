@@ -51,7 +51,8 @@ jobs:
     - name: Run the workflow (Posh)
       if: ${{matrix.os == 'windows-latest'}}
       run: |
-        $ErrorActionPreference = "SilentlyContinue"
+        # Do not use `Error`, because it crashes GitHub Actions - am using `$LastExitCode` instead
+        #$ErrorActionPreference = "SilentlyContinue"
         Set-PSDebug -Trace 1
         # Configure Git for the push from the workflow to the repository
         git config --global user.email "tomas@hubelbauer.net"
@@ -68,18 +69,26 @@ jobs:
         $LastExitCode
         # Authenticate with GitHub using the out of the box workflow integration PAT
         git remote set-url origin https://tomashubelbauer:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}
+        $LastExitCode
         # Add the command output to the commit
         git add screenshot-*.png
+        $LastExitCode
         git add screenshot-*.jpg
+        $LastExitCode
         git status
+        $LastExitCode
         # Reset unstaged changes to prevent `git commit` from yelling if there's e.g. `package-lock.json` or caches
         git checkout -- .
+        $LastExitCode
         # Commit the added changes to the repository associated with this workflow (if any)
         If (git diff-index --quiet HEAD --) {
           exit
         }
         git commit -m "Commit the screenshots"
+        $LastExitCode
         # Rebase if the branch has meanwhile changed (fail if there are automatically irresolvable merge conflicts)
         git pull --rebase
+        $LastExitCode
         # Push the commit to the repository associated with this workflow
         git push
+        $LastExitCode

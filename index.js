@@ -14,21 +14,24 @@ void async function () {
 }()
 
 async function run(/** @type {String} */ path, /** @type {'png' | 'jpeg'} */ type) {
+  // Use yesterday's front page to make sure it doesn't change between runs
+  const stamp = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().slice(0, 'yyyy-mm-dd'.length);
+  const url = `https://news.ycombinator.com/front?day=${stamp}`;
   const browser = await puppeteer.launch();
   const [page] = await browser.pages();
-  await page.goto('https://news.ycombinator.com');
+  await page.goto(url);
   await page.screenshot({ path, type });
   await browser.close();
 }
 
 async function check(/** @type {'png' | 'jpeg'} */ type) {
-  const screenshotPath = path.join(__dirname, 'screenshot-' + process.platform + '.' + type);
+  const initialPath = `screenshot-${process.platform}-1.${type}`;
+  await run(path.join(__dirname, initialPath), type);
+  const initialBuffer = await fs.readFile(initialPath);
 
-  await run(screenshotPath, type);
-  const initialBuffer = await fs.readFile(screenshotPath);
-
-  await run(screenshotPath, type);
-  const comparisonBuffer = await fs.readFile(screenshotPath);
+  const comparisonPath = `screenshot-${process.platform}-2.${type}`;
+  await run(path.join(__dirname, comparisonPath), type);
+  const comparisonBuffer = await fs.readFile(comparisonPath);
 
   const length = Math.max(initialBuffer.byteLength, comparisonBuffer.byteLength);
   const differences = 0;

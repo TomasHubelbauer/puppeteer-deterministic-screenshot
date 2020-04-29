@@ -55,13 +55,17 @@ jobs:
         Set-PSDebug -Trace 1
         # Configure Git for the push from the workflow to the repository
         git config --global user.email "tomas@hubelbauer.net"
+        $LastExitCode
         git config --global user.name "Tomas Hubelbauer"
+        $LastExitCode
         # Check out the `master` branch because by default GitHub Actions checks out detached HEAD
         #git checkout master
         $LastExitCode
         # Run the command
         npm install
+        $LastExitCode
         node .
+        $LastExitCode
         # Authenticate with GitHub using the out of the box workflow integration PAT
         git remote set-url origin https://tomashubelbauer:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}
         # Add the command output to the commit

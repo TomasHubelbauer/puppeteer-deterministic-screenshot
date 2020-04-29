@@ -51,7 +51,9 @@ jobs:
     - name: Run the workflow (Posh)
       if: ${{matrix.os == 'windows-latest'}}
       run: |
-        # Do not use `Error`, because it crashes GitHub Actions - am using `$LastExitCode` instead
+        # Run after macOS and Ubuntu because Git doesn't handle the concurrency
+        Sleep -Seconds 20
+        # Do not use `Error`, because it crashes GitHub Actions - am using `$LastExitCode` instead, possibly due to the above
         #$ErrorActionPreference = "SilentlyContinue"
         Set-PSDebug -Trace 1
         # Configure Git for the push from the workflow to the repository

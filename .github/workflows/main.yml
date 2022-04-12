@@ -32,7 +32,7 @@ jobs:
         git remote set-url origin https://:${{github.token}}@github.com/${{github.repository}}
         # Add the command output to the commit
         git add screenshot-*.png
-        git add screenshot-*.jpg
+        git add screenshot-*.jpeg
         git status
         # Reset unstaged changes to prevent `git commit` from yelling if there's e.g. `package-lock.json` or caches
         git checkout -- .

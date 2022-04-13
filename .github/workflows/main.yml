@@ -63,18 +63,12 @@ jobs:
         $LastExitCode
         git config --global user.name "github-actions[bot]"
         $LastExitCode
-        # Check out the `master` branch because by default GitHub Actions checks out detached HEAD
-        git checkout master
-        $LastExitCode
         # Rebase if the branch has meanwhile changed (fail if there are automatically irresolvable merge conflicts)
         git pull --rebase
         # Run the command
         npm install
         $LastExitCode
         node .
-        $LastExitCode
-        # Authenticate with GitHub using the out of the box workflow integration PAT
-        git remote set-url origin https://${{github.repository_owner}}:${{github.token}}@github.com/${{github.repository}}
         $LastExitCode
         # Add the command output to the commit
         git add screenshot-*.png

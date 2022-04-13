@@ -8,7 +8,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-    - uses: actions/checkout@v1
+    - name: Check out the main branch
+      uses: actions/checkout@v3
+      with:
+        ref: master
     - name: Install Puppeteer dependencies
       if: ${{matrix.os == 'ubuntu-latest'}}
       run: |
@@ -23,26 +26,28 @@ jobs:
         # Configure Git for the push from the workflow to the repository
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        # Check out the `master` branch because by default GitHub Actions checks out detached HEAD
-        git checkout master
+
         # Run the command
         npm install
         node .
-        # Authenticate with GitHub using the out of the box workflow integration PAT
-        git remote set-url origin https://${{github.repository_owner}}:${{github.token}}@github.com/${{github.repository}}
+
         # Add the command output to the commit
         git add screenshot-*.png
         git add screenshot-*.jpeg
         git status
+        
         # Reset unstaged changes to prevent `git commit` from yelling if there's e.g. `package-lock.json` or caches
         git checkout -- .
+        
         # Commit the added changes to the repository associated with this workflow (if any)
         if git diff-index --quiet HEAD --; then
           exit
         fi
         git commit -m "Commit the screenshots"
+        
         # Rebase if the branch has meanwhile changed (fail if there are automatically irresolvable merge conflicts)
         git pull --rebase
+        
         # Push the commit to the repository associated with this workflow
         git push
     - name: Run the workflow (Posh)

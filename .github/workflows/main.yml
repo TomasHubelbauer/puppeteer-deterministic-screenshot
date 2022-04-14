@@ -11,7 +11,7 @@ jobs:
     - name: Check out the main branch
       uses: actions/checkout@v3
       with:
-        ref: master
+        ref: main
     - name: Install Puppeteer dependencies
       if: ${{matrix.os == 'ubuntu-latest'}}
       run: |
